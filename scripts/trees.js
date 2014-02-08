@@ -18,11 +18,11 @@ function loadTrees()
 
 	trees[7]={name:"Hawthorn",latinname:"Crataegus monogyna",leafshape:"Hand-shaped",buds:"alternate", fruittype:"Fleshy.", stemcolor: "", fruitcolor: "Red", photo: "hawthorn.jpg"};
 
-	trees[8]={name:"Maple",latinname:"Acer campestre",leafshape:"Hand-shaped",buds:"opposite", fruittype:"Winged", stemcolor: "", fruitcolor: "", photo: "maple.jpg"};
+	trees[8]={name:"Field Maple",latinname:"Acer campestre",leafshape:"Hand-shaped",buds:"opposite", fruittype:"Winged", stemcolor: "", fruitcolor: "", photo: "fieldmaple.jpg"};
 
-	trees[9]={name:"Sycomore",latinname:"Acer pseudoplatanus",leafshape:"hand-shaped",buds:"opposite", fruittype:"Winged", stemcolor: "", fruitcolor: "", photo: "sycomore.jpg"};
+	trees[9]={name:"Sycamore",latinname:"Acer pseudoplatanus",leafshape:"hand-shaped",buds:"opposite", fruittype:"Winged", stemcolor: "", fruitcolor: "", photo: "sycamore.jpg"};
 
-	trees[10]={name:"Birch",latinname:"Betula pendula",leafshape:"Triangular",buds:"Alternate", fruittype:"", stemcolor: "", fruitcolor: "", photo: "Birch.jpg"};
+	trees[10]={name:"Silver Birch",latinname:"Betula pendula",leafshape:"Triangular",buds:"Alternate", fruittype:"", stemcolor: "", fruitcolor: "", photo: "Silverbirch.jpg"};
 
 	trees[11]={name:"Oak",latinname:"Quercy robur",leafshape:"Lobed",buds:"alternate", fruittype:"Hard", stemcolor: "", fruitcolor: "Green", photo: "oak.jpg"};
 
@@ -30,7 +30,7 @@ function loadTrees()
 
 	trees[13]={name:"Horse Chestnut",latinname:"Aescutus hippocastanum",leafshape:"Separate leaflets",buds:"Opposite", fruittype:"Hard", stemcolor: "", fruitcolor: "Brown", photo: "horsechesnut.jpg"};
 	
-	trees[14]={name:"Holly",latinname:"Ilex aquifolium",leafshape:"Oval,spine",buds:"Alternate", fruittype:"Fleshy", stemcolor: "", fruitcolor: "Red", photo: "holly.jpg"};
+	trees[14]={name:"Holly",latinname:"Ilex aquifolium",leafshape:"Oval, spines",buds:"Alternate", fruittype:"Fleshy", stemcolor: "", fruitcolor: "Red", photo: "holly.jpg"};
 
 	trees[15]={name:"Beech",latinname:"Fagus sylvatica",leafshape:"Oval",buds:"Alternate", fruittype:"Hard", stemcolor: "", fruitcolor: "", photo: "beech.jpg"};
 
