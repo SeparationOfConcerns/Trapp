@@ -5,6 +5,8 @@ function loadTrees()
 	trees[0]={name:"Dogwood",latinname:"Cornus sanguinea",leafshape:"Oval, curved veins",buds:"Opposite", fruittype:"Fleshy", stemcolor: "Red", fruitcolor: "", photo: "dogwood.jpg"};
 	
 	trees[1]={name:"English Elm",latinname:"Ulmus procera",leafshape:"Oval",buds:"Alternate", fruittype:"Hard", stemcolor: "", fruitcolor: "", photo: "englishelm.jpg"};
+
+	trees[2]={name:"Wayfaring Tree",latinname:"Viburnum fantana",leafshape:"Oval, rounded",buds:"Opposite", fruittype:"Fleshy", stemcolor: "", fruitcolor: "Red and black", photo: "wayfaring.jpg"};
 	
 	trees[3]={name:"Yew",latinname:"Taxus baccata",leafshape:"needle-like",buds:"", fruittype:"fleshy", stemcolor: "", fruitcolor: "", photo: "yew.jpg"};
 
