@@ -1,0 +1,194 @@
+<!doctype HTML>
+<html>
+	<head>
+		<meta name="viewport" content="width=320, initial-scale=1">
+		<script src="scripts/jquery-1.9.1.min.js"></script>
+		<script src="scripts/jquery.flexslider-min.js"></script>
+		<link rel="stylesheet" href="stylesheets/flexslider.css">
+		<link rel="stylesheet" href="stylesheets/stylesheet.css">
+	</head>
+	<body onload="getLocation(), getTime()">
+		<div id="wrapper">
+			<h1>CrappTrapp</h1>
+			
+			<div class="boxb">Trinity College Cricket Grounds</div>
+			<div class="boxb" id="time"></div>
+			<div class="boxb" id="gps">Waiting for location...</div>
+			<div id="map" onclick="getLocation()">
+				<img src="images/map.gif"/>
+			</div>
+			<div id="pict" onclick="getPicture()"><img src="images/shutter.png"/></div>
+			<form id="observation">
+				<input id="getPict" onchange="loadPicture();" type="file" accept="image/*" capture="camera" value="Capture Photo">
+				
+				<select class="boxb">
+					<option value="0">-Leaf Shape</option>
+					<option value="oval">Oval</option>
+					<option value="ovalrounded">Oval, rounded</option>
+					<option value="ovallong">Oval, long</option>
+					<option value="ovalcurvedveins">Oval, curved veins</option>
+				</select><br>
+				<select class="boxb">
+					<option value="">-Buds</option>
+					<option value="opposite">Opposite</option>
+					<option value="opposing">Opposing</option>
+					<option value="altenate">Alternate</option>
+				</select><br>
+				<select class="boxb">
+					<option value="">-Stem Colour</option>
+					<option value="na">N/A</option>
+					<option value="red">Red</option>
+					<option value="brown">Brown</option>
+				</select><br>
+				<select class="boxb">
+					<option value="">-Fruit Colour</option>
+					<option value="na">N/A</option>
+					<option value="black">Black</option>
+					<option value="red">Red</option>
+				</select><br>
+				<div class="flexslider">
+					<ul class="slides">
+						<li><img src="images/trees/oak.jpg" alt="Oak"/><p>Oak</p></li>
+						<li><img src="images/trees/beech.jpg"/><p>Beech</p></li>
+						<li><img src="images/trees/sycamore.jpg"/><p>Sycamore</p></li>
+					</ul>
+				</div>	
+				<textarea class="boxb" name="note" placeholder="Enter Observation Notes"></textarea><br/>
+				<input class="boxb" type="submit" value="Save">
+			</form>
+			
+			<script>
+				// Can also be used with $(document).ready()
+				$(window).load(function() {
+					$('.flexslider').flexslider({
+					animation: "slide",
+					controlNav: false
+					});
+				});
+				
+				$('#getPict').hide();
+			</script>
+			
+			<script>
+				var x = document.getElementById("gps");
+				var y = document.getElementById("time");
+			
+				function getPicture()
+				{
+					$('#getPict').show();
+					$('#getPict').focus();
+					$('#getPict').click();
+					$('#getPict').hide();
+				}
+			
+				function loadPicture()
+				{
+					var pictureUpload = document.getElementById("getPict");	
+					var file = pictureUpload.files[0];
+					var fileDisplayArea = document.getElementById("pict");
+					var imageType = /image.*/;
+
+					if (file.type.match(imageType)) {
+					  var reader = new FileReader();
+
+					  reader.onload = function(e) {
+						fileDisplayArea.innerHTML = "";
+
+						// Create a new image.
+						var img = new Image();
+						// Set the img src property using the data URL.
+						img.src = reader.result;
+
+						// Add the image to the page.
+						fileDisplayArea.appendChild(img);
+					  }
+
+					  reader.readAsDataURL(file); 
+					} else {
+					  fileDisplayArea.innerHTML = "File not supported!";
+}
+					
+					
+					if(a.files.length == 1 && a.files[0].type.indexOf("image/") == 0) 
+					{
+						z.src = a.files[0];
+					}
+				}
+				
+				function getTime()
+				{
+					var now     = new Date(); 
+					var year    = now.getFullYear();
+					var month   = now.getMonth()+1; 
+					var day     = now.getDate();
+					var hour    = now.getHours();
+					var minute  = now.getMinutes();
+					var second  = now.getSeconds(); 
+					if(month.toString().length == 1) {
+						var month = '0'+month;
+					}
+					if(day.toString().length == 1) {
+						var day = '0'+day;
+					}   
+					if(hour.toString().length == 1) {
+						var hour = '0'+hour;
+					}
+					if(minute.toString().length == 1) {
+						var minute = '0'+minute;
+					}
+					if(second.toString().length == 1) {
+						var second = '0'+second;
+					}   
+					var dateTime = year+'/'+month+'/'+day+' '+hour+':'+minute+':'+second;
+					y.innerHTML = dateTime;
+					
+					setTimeout("getTime()",1000);
+				}
+				
+				function getLocation()
+				{
+					x.innerHTML = "Retrieving location from device...";
+					if (navigator.geolocation)
+					{
+						navigator.geolocation.getCurrentPosition(showPosition, showError);
+					}
+					else{x.innerHTML = "Geolocation is not supported by this browser.";}
+					
+					setTimeout("getLocation()",60000);
+				}
+				  
+				function showPosition(position)
+				{
+					var latlon = position.coords.latitude + "," + position.coords.longitude;
+
+					var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
+					+latlon+"&zoom=16&size=292x200&sensor=false";
+
+					document.getElementById("map").innerHTML = "<img src='"+img_url+"'>";
+					
+					x.innerHTML = "Lat: " + (Math.round(position.coords.latitude * 100000) / 100000) + 
+					", Lon: " + (Math.round(position.coords.longitude * 100000) / 100000); 
+				}
+				
+				function showError(error)
+				{
+					switch(error.code) 
+					{
+						case error.PERMISSION_DENIED:
+							x.innerHTML = "TURN ON GPS"
+							break;
+						case error.POSITION_UNAVAILABLE:
+							x.innerHTML = "GPS NOT AVAILABLE"
+							break;
+						case error.TIMEOUT:
+							x.innerHTML = "GPS TIMED OUT"
+							break;
+						case error.UNKNOWN_ERROR:
+							x.innerHTML = "GPS ERROR"
+							break;
+					}
+				}
+			</script>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,99 @@
+*
+{
+	margin: 0px;
+	padding: 0px;
+}
+
+body
+{
+	background-color: #339999;
+	color: #222;
+	font-family: helvetica;
+}
+
+h1
+{
+	text-align: center;
+	font-size: 45px;
+	color: #4482c9;
+}
+
+.boxb
+{
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+}
+
+#wrapper
+{
+	width: 300px;
+	padding: 10px;
+}
+
+#map, #pict, h1, .boxb
+{ 
+	background: #fff; 
+	border: 4px solid #fff; 
+	position: relative; 
+	-webkit-border-radius: 4px; 
+	-moz-border-radius: 4px; 
+	-o-border-radius: 4px; 
+	border-radius: 4px; 
+	-webkit-box-shadow: 0 1px 4px rgba(0,0,0,.2); 
+	-moz-box-shadow: 0 1px 4px rgba(0,0,0,.2); 
+	-o-box-shadow: 0 1px 4px rgba(0,0,0,.2); 
+	box-shadow: 0 1px 4px rgba(0,0,0,.2); 
+	margin-bottom: 7px;
+}
+
+#map, #pict, #pict img, .flexslider .slides li img
+{
+	height: 200px;
+}
+
+.flexslider .slides li p
+{
+	padding: 10px;
+	width: 270px;
+	text-align: center;
+	height: 40px;
+	line-height: 40px;
+}
+
+.flexslider
+{
+	height: 260px;
+}
+
+select
+{
+	height: 50px;
+	width: 300px;
+	font-size: 16px;
+}
+
+input[type="file"]
+{
+	height: 0px;
+	width: 300px;
+}
+
+input[type="submit"]
+{
+	height: 50px;
+	width: 300px;
+	background-color: #ff9e00;
+	font-size: 20px;
+}
+
+textarea
+{
+	height: 100px;
+	width: 290px;
+}
+
+#pict img
+{
+	width: 292px;
+}
