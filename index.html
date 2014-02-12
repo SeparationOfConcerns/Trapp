@@ -4,10 +4,11 @@
 		<meta name="viewport" content="width=320, initial-scale=1">
 		<script src="scripts/jquery-1.9.1.min.js"></script>
 		<script src="scripts/jquery.flexslider-min.js"></script>
+		<script src="scripts/trees.js"></script>
 		<link rel="stylesheet" href="stylesheets/flexslider.css">
 		<link rel="stylesheet" href="stylesheets/stylesheet.css">
 	</head>
-	<body onload="getLocation(), getTime()">
+	<body onload="getLocation(), getTime(), getTrees()">
 		<div id="wrapper">
 			<h1>CrappTrapp</h1>
 			
@@ -17,63 +18,141 @@
 			<div id="map" onclick="getLocation()">
 				<img src="images/map.gif"/>
 			</div>
-			<div id="pict" onclick="getPicture()"><img src="images/shutter.png"/></div>
-			<form id="observation">
-				<input id="getPict" onchange="loadPicture();" type="file" accept="image/*" capture="camera" value="Capture Photo">
-				
-				<select class="boxb">
-					<option value="0">-Leaf Shape</option>
-					<option value="oval">Oval</option>
-					<option value="ovalrounded">Oval, rounded</option>
-					<option value="ovallong">Oval, long</option>
-					<option value="ovalcurvedveins">Oval, curved veins</option>
-				</select><br>
-				<select class="boxb">
-					<option value="">-Buds</option>
-					<option value="opposite">Opposite</option>
-					<option value="opposing">Opposing</option>
-					<option value="altenate">Alternate</option>
-				</select><br>
-				<select class="boxb">
-					<option value="">-Stem Colour</option>
-					<option value="na">N/A</option>
-					<option value="red">Red</option>
-					<option value="brown">Brown</option>
-				</select><br>
-				<select class="boxb">
-					<option value="">-Fruit Colour</option>
-					<option value="na">N/A</option>
-					<option value="black">Black</option>
-					<option value="red">Red</option>
-				</select><br>
-				<div class="flexslider">
-					<ul class="slides">
-						<li><img src="images/trees/oak.jpg"/><p>Oak</p></li>
-						<li><img src="images/trees/beech.jpg"/><p>Beech</p></li>
-						<li><img src="images/trees/sycamore.jpg"/><p>Sycamore</p></li>
-					</ul>
-				</div>	
-				<textarea class="boxb" name="note" placeholder="Enter Observation Notes"></textarea><br/>
-				<input class="boxb" type="submit" value="Save">
+			<div id="pict" onclick="getPicture()"><img src="images/shutter.png"/></div>				
+			<select onchange="getTrees()" id="leafShape" class="boxb">
+				<option value="">-Leaf Shape</option>
+				<option value="">Oval</option>
+				<option value="">Separate Leaflets</option>
+				<option value="">Needle</option>
+				<option value="">Hand</option>
+				<option value="">Triangular</option>
+			</select><br>
+			<select onchange="getTrees()" id="buds" class="boxb">
+				<option value="">-Buds</option>
+				<option value="opposite">Opposite</option>
+				<option value="opposing">Opposing</option>
+				<option value="altenate">Alternate</option>
+			</select><br>
+			<select onchange="getTrees()" id="fruitType" class="boxb">
+				<option value="">-Fruit Type</option>
+				<option value="na">N/A</option>
+				<option value="red">Berries</option>
+				<option value="red">Fleshy</option>
+				<option value="black">Hard</option>
+				<option value="red">Winged</option>
+			</select><br>
+			<select onchange="getTrees()" id="fruitColour" class="boxb">
+				<option value="">-Fruit Colour</option>
+				<option value="">N/A</option>
+				<option value="">Black</option>
+				<option value="">Brown</option>
+				<option value="">Green</option>
+				<option value="">Red</option>
+				<option value="">Red and Black</option>
+			</select><br>
+			<div class="flexslider">
+				<ul class="slides" id="slides">
+				</ul>
+			</div>
+			<form id="observation" action="http://www.w3schools.com/html/html_form_action.asp" method="get">
+				<input type="hidden" value="" name="gps" id="gpsh"/>
+				<input type="hidden" value="" name="date" id="timeh"/>
+				<input type="hidden" value="" name="tree" id="tree"/>
+				<input id="getPict" name="picture" onchange="loadPicture();" type="file" accept="image/*" capture="camera" value="Capture Photo">
+				<textarea class="boxb" id="note" name="observation" placeholder="Enter Observation Notes"></textarea><br/>
+				<input id="save" class="boxb" type="submit" value="Save">
 			</form>
 			
 			<script>
-				// Can also be used with $(document).ready()
-				$(window).load(function() {
-					$('.flexslider').flexslider({
-					animation: "slide",
-					controlNav: false
-					});
-				});
-				
 				$('#getPict').hide();
 			</script>
 			
 			<script>
-				var x = document.getElementById("gps");
-				var y = document.getElementById("time");
-			
+				var gps = document.getElementById("gps");
+				var time = document.getElementById("time");
+				var gpsh = document.getElementById("gpsh");
+				var timeh = document.getElementById("timeh");
 				
+			
+				function getTrees()
+				{
+					var leafShape, buds, stemColour, fruitType, fruitColour;
+					var allTrees = loadTrees();
+					var filteredTrees = new Array();
+					var slides = document.getElementById("slides");	
+					var slidesHTML = "";
+					
+					leafShape = document.getElementById("leafShape").options[document.getElementById("leafShape").selectedIndex].text;
+					buds = document.getElementById("buds").options[document.getElementById("buds").selectedIndex].text;
+					fruitType = document.getElementById("fruitType").options[document.getElementById("fruitType").selectedIndex].text;
+					fruitColour = document.getElementById("fruitColour").options[document.getElementById("fruitColour").selectedIndex].text;
+					
+					if(leafShape == '-Leaf Shape' || leafShape == 'N/A'){ leafShape = "";}
+					if(buds == '-Buds' || buds == 'N/A'){ buds = "";}
+					if(fruitType == '-Fruit Type' || fruitType == 'N/A'){ fruitType = "";}
+					if(fruitColour == '-Fruit Colour' || fruitColour == 'N/A'){ fruitColour = "";}
+					
+					for(var i = 0; i < allTrees.length; i++)
+					{
+						if(	(leafShape == "" || allTrees[i].leafshape == leafShape)
+							&& (buds == "" || allTrees[i].buds == buds)
+							&& (fruitType == "" || allTrees[i].fruitType == fruitType)
+							&& (fruitColour == "" || allTrees[i].fruitcolor == fruitColour))
+						{
+							filteredTrees.push(allTrees[i]);
+						}
+					}	
+					
+					filteredTrees.sort(compare);
+					
+					for(var i = 0; i < filteredTrees.length; i++)
+					{
+						slidesHTML += "<li><img src='images/trees/" + filteredTrees[i].photo + "'/><p>" + filteredTrees[i].name + "</p></li>";
+					}
+
+					if(slidesHTML == "")
+						slidesHTML = "<li><p>No Trees Match Your Filter Selection</p></li>";
+					
+					slides.innerHTML = "";
+					$('.flexslider').removeData("flexslider");				
+										
+					slides.innerHTML = slidesHTML;
+					flexInit();
+					
+				}
+				
+				function setSelectedTree()
+				{
+					var tree = document.getElementById("tree");
+					var save = document.getElementById("save");
+					var currentSlide = $('.flexslider').data('flexslider').currentSlide + 1;
+					var treeName = $(".flexslider li:nth-child(" + currentSlide + ") p").text();
+					
+					tree.value = treeName;
+					save.value = "Register " + treeName;
+				}
+				
+				function flexInit() 
+				{
+					$('.flexslider').flexslider({
+					animationLoop: false,
+					animation: "fade",
+					controlNav: false,
+					after: function(slider){setSelectedTree();},
+					start: function(slider){setSelectedTree();}
+					});
+				}
+				//this remove flexslider form element dataset
+				
+				
+				function compare(a,b) 
+				{
+					if (a.name < b.name)
+						return -1;
+					if (a.name > b.name)
+						return 1;
+					return 0;
+				}
 			
 				function getPicture()
 				{
@@ -142,20 +221,22 @@
 						var second = '0'+second;
 					}   
 					var dateTime = year+'/'+month+'/'+day+' '+hour+':'+minute+':'+second;
-					y.innerHTML = dateTime;
+					time.innerHTML = dateTime;
+					timeh.value = encodeURIComponent(dateTime);
 					
 					setTimeout("getTime()",1000);
 				}
 				
 				function getLocation()
 				{
-					x.innerHTML = "Retrieving location from device...";
+					gps.innerHTML = "Retrieving location from device...";
 					if (navigator.geolocation)
 					{
 						navigator.geolocation.getCurrentPosition(showPosition, showError);
 					}
-					else{x.innerHTML = "Geolocation is not supported by this browser.";}
+					else{gps.innerHTML = "Geolocation is not supported by this browser.";}
 					
+					gpsh.value = gps.innerHTML;
 					setTimeout("getLocation()",60000);
 				}
 				  
@@ -168,8 +249,10 @@
 
 					document.getElementById("map").innerHTML = "<img src='"+img_url+"'>";
 					
-					x.innerHTML = "Lat: " + (Math.round(position.coords.latitude * 100000) / 100000) + 
+					gps.innerHTML = "Lat: " + (Math.round(position.coords.latitude * 100000) / 100000) + 
 					", Lon: " + (Math.round(position.coords.longitude * 100000) / 100000); 
+					
+					gpsh.value = encodeURIComponent(gps.innerHTML);
 				}
 				
 				function showError(error)
