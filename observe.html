@@ -1,0 +1,120 @@
+<!doctype HTML>
+<html>
+	<head>
+		<meta name="viewport" content="width=320, initial-scale=1">
+		<script src="scripts/jquery-1.9.1.min.js"></script>
+		<script src="scripts/jquery.flexslider-min.js"></script>
+		<script src="scripts/trees.js"></script>
+		
+		
+		<script src="scripts/google-keys.js"></script>
+		<script src="scripts/google-fusion.js"></script>
+		<script src="scripts/google-drive.js"></script>
+		
+		
+		<script>
+			// Initialize the client, set onclick listeners.
+			function initialize() 
+			{
+				gapi.client.setApiKey(apiKey);
+				window.setTimeout(function() { auth(true); }, 1);
+			}
+
+			// Run OAuth 2.0 authorization.
+			function auth(immediate) 
+			{
+				gapi.auth.authorize(
+				{
+					client_id: clientId,
+					scope: scopes,
+					immediate: immediate
+				}
+				, handleAuthResult);
+			}
+
+			// Handle the results of the OAuth 2.0 flow.
+			function handleAuthResult(authResult) 
+			{
+				if (authResult) 
+				{
+					var auth = document.getElementById("username");	
+					auth.innerHTML = "Authorised";
+					getUserName(); 
+				} 
+				else 
+				{	
+					window.location = 'index.html'
+				}
+			}
+		</script>
+		
+		<script src="https://apis.google.com/js/client.js?onload=initialize"></script>
+		
+		<link rel="stylesheet" href="stylesheets/flexslider.css">
+		<link rel="stylesheet" href="stylesheets/stylesheet.css">
+	</head>
+	<body onload="getTime(), getTrees(), getLocation()">
+		<div id="wrapper">
+			
+			<h1>Trapp</h1>
+			<div id="profile" class="boxl">
+				<div id="username">Not Authorised</div>
+				<div id="survey">Trinity College Cricket Grounds</div>
+			</div>
+			<div class="boxb" id="time"></div>
+			<div class="boxb" id="gps">Waiting for location...</div>
+			<div id="map" onclick="getLocation()">
+				<img src="images/map.gif"/>
+			</div>
+			<div id="pict" onclick="getPicture()"><img src="images/shutter.png"/></div>				
+			<select onchange="getTrees()" id="leafShape" class="boxb">
+				<option value="">-Leaf Shape</option>
+				<option value="">Oval</option>
+				<option value="">Separate Leaflets</option>
+				<option value="">Needle</option>
+				<option value="">Hand</option>
+				<option value="">Triangular</option>
+			</select><br>
+			<select onchange="getTrees()" id="buds" class="boxb">
+				<option value="">-Buds</option>
+				<option value="">Opposite</option>
+				<option value="">Alternate</option>
+			</select><br>
+			<select onchange="getTrees()" id="fruitType" class="boxb">
+				<option value="">-Fruit Type</option>
+				<option value="">N/A</option>
+				<option value="">Berries</option>
+				<option value="">Fleshy</option>
+				<option value="">Hard</option>
+				<option value="">Winged</option>
+			</select><br>
+			<select onchange="getTrees()" id="fruitColour" class="boxb">
+				<option value="">-Fruit Colour</option>
+				<option value="">N/A</option>
+				<option value="">Black</option>
+				<option value="">Brown</option>
+				<option value="">Green</option>
+				<option value="">Red</option>
+				<option value="">Red and Black</option>
+			</select><br>
+			<div class="flexslider">
+				<ul class="slides" id="slides">
+				</ul>
+			</div>
+			<input id="getPict" name="picture" onchange="loadPicture();" type="file" accept="image/*" capture="camera" value="Capture Photo">
+			<textarea class="boxb" id="note" name="observation" placeholder="Enter Observation Notes"></textarea><br/>
+			
+			<input class="boxb" type="button" id="upload-button" value="Save" class="" onclick="insertObservation()">
+			
+			<p id="error"></p>
+			<p id="insert-data-output"><i>insert response goes here...</i></p>
+			
+			<script>
+				$('#getPict').hide();
+			</script>
+			
+		</div>
+		
+		<script src="scripts/trapp.js"></script>
+	</body>
+</html>

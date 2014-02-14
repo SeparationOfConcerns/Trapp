@@ -2,278 +2,61 @@
 <html>
 	<head>
 		<meta name="viewport" content="width=320, initial-scale=1">
-		<script src="scripts/jquery-1.9.1.min.js"></script>
-		<script src="scripts/jquery.flexslider-min.js"></script>
-		<script src="scripts/trees.js"></script>
-		<link rel="stylesheet" href="stylesheets/flexslider.css">
 		<link rel="stylesheet" href="stylesheets/stylesheet.css">
+		<script src="scripts/google-keys.js"></script>
+		<script>
+			// Initialize the client, set onclick listeners.
+			function initialize() 
+			{
+				gapi.client.setApiKey(apiKey);
+				window.setTimeout(function() { auth(true); }, 1);
+			}
+
+			// Run OAuth 2.0 authorization.
+			function auth(immediate) 
+			{
+				gapi.auth.authorize(
+				{
+					client_id: clientId,
+					scope: scopes,
+					immediate: immediate
+				}
+				, handleAuthResult);
+			}
+
+			// Handle the results of the OAuth 2.0 flow.
+			function handleAuthResult(authResult) 
+			{
+				var authorizeButton = document.getElementById('authorize-button');
+				if (authResult) 
+				{
+					authorizeButton.disabled = true;
+					window.location = 'observe.html'
+				} 
+				else 
+				{
+					authorizeButton.disabled = false;
+					authorizeButton.onclick = function() { auth(false); return false; };
+				}
+			}
+		</script>
+		<script src="https://apis.google.com/js/client.js?onload=initialize"></script>
 	</head>
-	<body onload="getLocation(), getTime(), getTrees()">
+	<body>
 		<div id="wrapper">
-			<h1>CrappTrapp</h1>
-			
-			<div class="boxb">Trinity College Cricket Grounds</div>
-			<div class="boxb" id="time"></div>
-			<div class="boxb" id="gps">Waiting for location...</div>
-			<div id="map" onclick="getLocation()">
-				<img src="images/map.gif"/>
+			<h1>Trapp</h1>
+			<div class="boxp">
+				<p>
+					Welcome to Trapp - the Tree Observation and Mapping App
+				</p>
+				<p>
+					Before you start you need to login using your Google account. That is because Trapp saves your observations to a Google database.
+				</p>
+				<p>
+					After you login you will see the observation screen where you can start mapping trees!
+				</p>
 			</div>
-			<div id="pict" onclick="getPicture()"><img src="images/shutter.png"/></div>				
-			<select onchange="getTrees()" id="leafShape" class="boxb">
-				<option value="">-Leaf Shape</option>
-				<option value="">Oval</option>
-				<option value="">Separate Leaflets</option>
-				<option value="">Needle</option>
-				<option value="">Hand</option>
-				<option value="">Triangular</option>
-			</select><br>
-			<select onchange="getTrees()" id="buds" class="boxb">
-				<option value="">-Buds</option>
-				<option value="opposite">Opposite</option>
-				<option value="opposing">Opposing</option>
-				<option value="altenate">Alternate</option>
-			</select><br>
-			<select onchange="getTrees()" id="fruitType" class="boxb">
-				<option value="">-Fruit Type</option>
-				<option value="na">N/A</option>
-				<option value="red">Berries</option>
-				<option value="red">Fleshy</option>
-				<option value="black">Hard</option>
-				<option value="red">Winged</option>
-			</select><br>
-			<select onchange="getTrees()" id="fruitColour" class="boxb">
-				<option value="">-Fruit Colour</option>
-				<option value="">N/A</option>
-				<option value="">Black</option>
-				<option value="">Brown</option>
-				<option value="">Green</option>
-				<option value="">Red</option>
-				<option value="">Red and Black</option>
-			</select><br>
-			<div class="flexslider">
-				<ul class="slides" id="slides">
-				</ul>
-			</div>
-			<form id="observation" action="http://www.w3schools.com/html/html_form_action.asp" method="get">
-				<input type="hidden" value="" name="gps" id="gpsh"/>
-				<input type="hidden" value="" name="date" id="timeh"/>
-				<input type="hidden" value="" name="tree" id="tree"/>
-				<input id="getPict" name="picture" onchange="loadPicture();" type="file" accept="image/*" capture="camera" value="Capture Photo">
-				<textarea class="boxb" id="note" name="observation" placeholder="Enter Observation Notes"></textarea><br/>
-				<input id="save" class="boxb" type="submit" value="Save">
-			</form>
-			
-			<script>
-				$('#getPict').hide();
-			</script>
-			
-			<script>
-				var gps = document.getElementById("gps");
-				var time = document.getElementById("time");
-				var gpsh = document.getElementById("gpsh");
-				var timeh = document.getElementById("timeh");
-				
-			
-				function getTrees()
-				{
-					var leafShape, buds, stemColour, fruitType, fruitColour;
-					var allTrees = loadTrees();
-					var filteredTrees = new Array();
-					var slides = document.getElementById("slides");	
-					var slidesHTML = "";
-					
-					leafShape = document.getElementById("leafShape").options[document.getElementById("leafShape").selectedIndex].text;
-					buds = document.getElementById("buds").options[document.getElementById("buds").selectedIndex].text;
-					fruitType = document.getElementById("fruitType").options[document.getElementById("fruitType").selectedIndex].text;
-					fruitColour = document.getElementById("fruitColour").options[document.getElementById("fruitColour").selectedIndex].text;
-					
-					if(leafShape == '-Leaf Shape' || leafShape == 'N/A'){ leafShape = "";}
-					if(buds == '-Buds' || buds == 'N/A'){ buds = "";}
-					if(fruitType == '-Fruit Type' || fruitType == 'N/A'){ fruitType = "";}
-					if(fruitColour == '-Fruit Colour' || fruitColour == 'N/A'){ fruitColour = "";}
-					
-					for(var i = 0; i < allTrees.length; i++)
-					{
-						if(	(leafShape == "" || allTrees[i].leafshape == leafShape)
-							&& (buds == "" || allTrees[i].buds == buds)
-							&& (fruitType == "" || allTrees[i].fruitType == fruitType)
-							&& (fruitColour == "" || allTrees[i].fruitcolor == fruitColour))
-						{
-							filteredTrees.push(allTrees[i]);
-						}
-					}	
-					
-					filteredTrees.sort(compare);
-					
-					for(var i = 0; i < filteredTrees.length; i++)
-					{
-						slidesHTML += "<li><img src='images/trees/" + filteredTrees[i].photo + "'/><p>" + filteredTrees[i].name + "</p></li>";
-					}
-
-					if(slidesHTML == "")
-						slidesHTML = "<li><p>No Trees Match Your Filter Selection</p></li>";
-					
-					slides.innerHTML = "";
-					$('.flexslider').removeData("flexslider");				
-										
-					slides.innerHTML = slidesHTML;
-					flexInit();
-					
-				}
-				
-				function setSelectedTree()
-				{
-					var tree = document.getElementById("tree");
-					var save = document.getElementById("save");
-					var currentSlide = $('.flexslider').data('flexslider').currentSlide + 1;
-					var treeName = $(".flexslider li:nth-child(" + currentSlide + ") p").text();
-					
-					tree.value = treeName;
-					save.value = "Register " + treeName;
-				}
-				
-				function flexInit() 
-				{
-					$('.flexslider').flexslider({
-					animationLoop: false,
-					animation: "fade",
-					controlNav: false,
-					after: function(slider){setSelectedTree();},
-					start: function(slider){setSelectedTree();}
-					});
-				}
-				//this remove flexslider form element dataset
-				
-				
-				function compare(a,b) 
-				{
-					if (a.name < b.name)
-						return -1;
-					if (a.name > b.name)
-						return 1;
-					return 0;
-				}
-			
-				function getPicture()
-				{
-					$('#getPict').show();
-					$('#getPict').focus();
-					$('#getPict').click();
-					$('#getPict').hide();
-				}
-			
-				function loadPicture()
-				{
-					var pictureUpload = document.getElementById("getPict");	
-					var file = pictureUpload.files[0];
-					var fileDisplayArea = document.getElementById("pict");
-					var imageType = /image.*/;
-
-					if (file.type.match(imageType)) {
-					  var reader = new FileReader();
-
-					  reader.onload = function(e) {
-						fileDisplayArea.innerHTML = "";
-
-						// Create a new image.
-						var img = new Image();
-						// Set the img src property using the data URL.
-						img.src = reader.result;
-
-						// Add the image to the page.
-						fileDisplayArea.appendChild(img);
-					  }
-
-					  reader.readAsDataURL(file); 
-					} else {
-					  fileDisplayArea.innerHTML = "File not supported!";
-}
-					
-					
-					if(a.files.length == 1 && a.files[0].type.indexOf("image/") == 0) 
-					{
-						z.src = a.files[0];
-					}
-				}
-				
-				function getTime()
-				{
-					var now     = new Date(); 
-					var year    = now.getFullYear();
-					var month   = now.getMonth()+1; 
-					var day     = now.getDate();
-					var hour    = now.getHours();
-					var minute  = now.getMinutes();
-					var second  = now.getSeconds(); 
-					if(month.toString().length == 1) {
-						var month = '0'+month;
-					}
-					if(day.toString().length == 1) {
-						var day = '0'+day;
-					}   
-					if(hour.toString().length == 1) {
-						var hour = '0'+hour;
-					}
-					if(minute.toString().length == 1) {
-						var minute = '0'+minute;
-					}
-					if(second.toString().length == 1) {
-						var second = '0'+second;
-					}   
-					var dateTime = year+'/'+month+'/'+day+' '+hour+':'+minute+':'+second;
-					time.innerHTML = dateTime;
-					timeh.value = encodeURIComponent(dateTime);
-					
-					setTimeout("getTime()",1000);
-				}
-				
-				function getLocation()
-				{
-					gps.innerHTML = "Retrieving location from device...";
-					if (navigator.geolocation)
-					{
-						navigator.geolocation.getCurrentPosition(showPosition, showError);
-					}
-					else{gps.innerHTML = "Geolocation is not supported by this browser.";}
-					
-					gpsh.value = gps.innerHTML;
-					setTimeout("getLocation()",60000);
-				}
-				  
-				function showPosition(position)
-				{
-					var latlon = position.coords.latitude + "," + position.coords.longitude;
-
-					var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
-					+latlon+"&zoom=16&size=292x200&sensor=false";
-
-					document.getElementById("map").innerHTML = "<img src='"+img_url+"'>";
-					
-					gps.innerHTML = "Lat: " + (Math.round(position.coords.latitude * 100000) / 100000) + 
-					", Lon: " + (Math.round(position.coords.longitude * 100000) / 100000); 
-					
-					gpsh.value = encodeURIComponent(gps.innerHTML);
-				}
-				
-				function showError(error)
-				{
-					switch(error.code) 
-					{
-						case error.PERMISSION_DENIED:
-							x.innerHTML = "TURN ON GPS"
-							break;
-						case error.POSITION_UNAVAILABLE:
-							x.innerHTML = "GPS NOT AVAILABLE"
-							break;
-						case error.TIMEOUT:
-							x.innerHTML = "GPS TIMED OUT"
-							break;
-						case error.UNKNOWN_ERROR:
-							x.innerHTML = "GPS ERROR"
-							break;
-					}
-				}
-			</script>
+			<input type="button" id="authorize-button" value="" class="google">
 		</div>
 	</body>
 </html>
