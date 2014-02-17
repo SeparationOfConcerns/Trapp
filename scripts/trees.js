@@ -18,13 +18,13 @@ function loadTrees()
 
 	trees[7]={name:"Scots Pine",latinname:"Pinus sylvestris",leafshape:"Needle",buds:"", fruittype:"Cone", stemcolor: "", fruitcolor: "", photo: "Scotspine.jpg"};
 
-	trees[8]={name:"Ivy",latinname:"Hedera helix",leafshape:"Hand",buds:"alternate", fruittype:"Fleshy", stemcolor: "", fruitcolor: "Black", photo: "Ivy.jpg"};
+	trees[8]={name:"Ivy",latinname:"Hedera helix",leafshape:"Hand",buds:"Alternate", fruittype:"Fleshy", stemcolor: "", fruitcolor: "Black", photo: "Ivy.jpg"};
 
-	trees[9]={name:"Sycamore",latinname:"Acer pseudoplatanus",leafshape:"Hand",buds:"opposite", fruittype:"Winged", stemcolor: "", fruitcolor: "", photo: "sycamore.jpg"};
+	trees[9]={name:"Sycamore",latinname:"Acer pseudoplatanus",leafshape:"Hand",buds:"Opposite", fruittype:"Winged", stemcolor: "", fruitcolor: "", photo: "sycamore.jpg"};
 
 	trees[10]={name:"Silver Birch",latinname:"Betula pendula",leafshape:"Triangular",buds:"Alternate", fruittype:"", stemcolor: "", fruitcolor: "", photo: "Silverbirch.jpg"};
 
-	trees[11]={name:"Oak",latinname:"Quercy robur",leafshape:"Curved",buds:"alternate", fruittype:"Hard", stemcolor: "", fruitcolor: "Green", photo: "oak.jpg"};
+	trees[11]={name:"Oak",latinname:"Quercy robur",leafshape:"Curved",buds:"Alternate", fruittype:"Hard", stemcolor: "", fruitcolor: "Green", photo: "oak.jpg"};
 
 	trees[12]={name:"Blackberry",latinname:"Rubus fruticosus",leafshape:"Separate Leaflets",buds:"Alternate", fruittype:"Berries", stemcolor: "", fruitcolor: "Black", photo: "blackberry.jpg"};
 

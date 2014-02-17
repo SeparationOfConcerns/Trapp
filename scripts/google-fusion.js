@@ -1,3 +1,30 @@
+function getUserName()
+{
+	// This function code is based on
+	// https://developers.google.com/+/web/people/
+	
+	// this function calls the Google Plus API
+	// and gets the profile information for the person
+	// known as "me" (the logged in user)
+	
+	gapi.client.load('plus','v1', function(){
+		var request = gapi.client.plus.people.get({
+			'userId': 'me'
+		});
+		request.execute(function(resp) {
+			// when we get a response from the API call the displayUserName function
+			displayUserName(resp.displayName, resp.image.url);
+		});
+	});
+}
+
+// a function to display the users details in the app
+function displayUserName(username, srcurl)
+{
+	document.getElementById("username").innerHTML = username + "<img id='userimg'/>";
+	document.getElementById("userimg").src = srcurl;
+}
+
 var tableId = '1RQO8PRIQtoeciDA9AIU6phr3TT7QkTbuhM_KwPo';
 
   // Run a request to INSERT a tree observation.
@@ -58,24 +85,3 @@ function runClientRequest(request, callback)
 	restRequest.execute(callback);
 }
 
-function getUserName()
-{
-	
-	// This sample assumes a client object has been created.
-	// To learn more about creating a client, check out the starter:
-	//  https://developers.google.com/+/quickstart/javascript
-	gapi.client.load('plus','v1', function(){
-												var request = gapi.client.plus.people.get({
-												'userId': 'me'
-												});
-												request.execute(function(resp) {
-																					displayUserName(resp.displayName, resp.image.url);
-																				});
-											});
-}
-
-function displayUserName(username, srcurl)
-{
-	document.getElementById("username").innerHTML = username + "<img id='userimg'/>";
-	document.getElementById("userimg").src = srcurl;
-}

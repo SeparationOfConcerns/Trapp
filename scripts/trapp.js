@@ -1,8 +1,5 @@
-
-var latlong;
 var tree;
 
-var gps = document.getElementById("gps");
 var time = document.getElementById("time");
 
 function insertObservation()
@@ -14,7 +11,7 @@ function insertObservation()
 	var error = "";	
 	
 	if(date == ""){error += "The date of the observation is not valid<br/>";}
-	if(latlong == ""){error += "The GPS location of the observation is not valid<br/>";}
+	if(latlon == ""){error += "The GPS location of the observation is not valid<br/>";}
 	if(tree == ""){error += "Please select a tree<br/>";}
 	
 	var pictureUpload = document.getElementById("getPict");	
@@ -29,7 +26,7 @@ function insertObservation()
 	}
 	else
 	{
-		insert(survey, latlong, date, tree, uploadPictureToGoogle(), testnotes);
+		insert(survey, latlon, date, tree, uploadPictureToGoogle(), testnotes);
 		alert("You have inserted your observation of a " + tree + " tree into the observation database.");
 		reset();
 	}
@@ -232,65 +229,3 @@ function getTime()
 	setTimeout("getTime()",1000);
 }
 
-function getLocation()
-{
-	latlong = "";
-	var options = { enableHighAccuracy: true, maximumAge: 100, timeout: 60000 };
-	
-	gps.innerHTML = "Retrieving location from device...";
-	
-	if( navigator.geolocation) 
-	{
-		var watchID = navigator.geolocation.watchPosition( gotPos, gotErr, options );
-		var timeout = setTimeout( function() { navigator.geolocation.clearWatch( watchID ); }, 5000 );
-	} 
-	else 
-	{
-		gps.innerHTML = "Geolocation is not supported by this browser.";
-	}
-/*
-	if (navigator.geolocation)
-	{
-		navigator.geolocation.getCurrentPosition(showPosition, showError);
-	}
-	
-	else{}
-	*/
-	setTimeout("getLocation()",120000);
-}
-
-
- 
-function gotPos(position)
-{
-	var latlon = position.coords.latitude + "," + position.coords.longitude;
-
-	var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
-	+latlon+"&zoom=16&size=292x200&sensor=false";
-
-	document.getElementById("map").innerHTML = "<img src='"+img_url+"'>";
-	
-	gps.innerHTML = "Lat: " + (Math.round(position.coords.latitude * 100000) / 100000) + 
-	", Lon: " + (Math.round(position.coords.longitude * 100000) / 100000); 
-	
-	latlong = position.coords.latitude + ", " + position.coords.longitude;
-}
-
-function gotErr(error)
-{
-	switch(error.code) 
-	{
-		case error.PERMISSION_DENIED:
-			x.innerHTML = "TURN ON GPS"
-			break;
-		case error.POSITION_UNAVAILABLE:
-			x.innerHTML = "GPS NOT AVAILABLE"
-			break;
-		case error.TIMEOUT:
-			x.innerHTML = "GPS TIMED OUT"
-			break;
-		case error.UNKNOWN_ERROR:
-			x.innerHTML = "GPS ERROR"
-			break;
-	}
-}

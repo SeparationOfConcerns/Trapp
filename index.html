@@ -5,11 +5,16 @@
 		<link rel="stylesheet" href="stylesheets/stylesheet.css">
 		<script src="scripts/google-keys.js"></script>
 		<script>
+		
+			// Most of the code on this page is taken verbatim from
+			// https://developers.google.com/api-client-library/javascript/features/authentication	
+			// I have added comments to explain each line of code where I thought it was required
+			
 			// Initialize the client, set onclick listeners.
 			function initialize() 
 			{
-				gapi.client.setApiKey(apiKey);
-				window.setTimeout(function() { auth(true); }, 1);
+				gapi.client.setApiKey(apiKey); //pass the API key to the Google API Client (see the last line before </head>)
+				window.setTimeout(function() { auth(true); }, 1); //this line tells the webpage to run the function auth after 1 millisecond
 			}
 
 			// Run OAuth 2.0 authorization.
@@ -17,8 +22,8 @@
 			{
 				gapi.auth.authorize(
 				{
-					client_id: clientId,
-					scope: scopes,
+					client_id: clientId,	// note that we are passing in the clientId at this point
+					scope: scopes,			// we are passing in the scope (the APIs we need access to) at this point
 					immediate: immediate
 				}
 				, handleAuthResult);
@@ -27,16 +32,16 @@
 			// Handle the results of the OAuth 2.0 flow.
 			function handleAuthResult(authResult) 
 			{
-				var authorizeButton = document.getElementById('authorize-button');
+				var authorizeButton = document.getElementById('authorize-button'); //the login button that the user sees
 				if (authResult) 
 				{
-					authorizeButton.disabled = true;
-					window.location = 'observe.html'
+					authorizeButton.disabled = true;	// disable the login button as the user is authorised
+					window.location = 'observe.html'	// redirect the user to the observe page as they are authorised
 				} 
 				else 
 				{
-					authorizeButton.disabled = false;
-					authorizeButton.onclick = function() { auth(false); return false; };
+					authorizeButton.disabled = false;	// enable the login button as the user is not authorised
+					authorizeButton.onclick = function() { auth(false); return false; }; // if the user clicks the button try and log them in
 				}
 			}
 		</script>
@@ -50,7 +55,7 @@
 					Welcome to Trapp - the Tree Observation and Mapping App
 				</p>
 				<p>
-					Before you start you need to login using your Google account. That is because Trapp saves your observations to a Google database.
+					Before you start you need to login using your Google account. That is because Trapp saves your observations to a protected Google Fusion table.
 				</p>
 				<p>
 					After you login you will see the observation screen where you can start mapping trees!
